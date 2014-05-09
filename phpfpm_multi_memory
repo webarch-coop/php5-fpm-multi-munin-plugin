@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+
+my $PHP_BIN = exists $ENV{'phpbin'} ? $ENV{'phpbin'} : "php-fpm";
+my $PHP_POOLS = exists $ENV{'phppools'} ? $ENV{'phppools'} : "www";
+$PHP_POOLS =~ s/^"//;
+$PHP_POOLS =~ s/"$//;
+
+my @pools = split(/ /, $PHP_POOLS);
+
+if ( exists $ARGV[0] and $ARGV[0] eq "config" ) {
+	print "graph_title PHP5-FPM Memory Usage\n";
+	print "graph_vlabel RAM\n";
+	print "graph_category PHP\n";
+	foreach my $pool (@pools) {
+		print "$pool.label $pool\n";
+		print "$pool.draw LINE2\n"
+	}
+	print "graph_args --base 1024\n";
+} else {
+	my $value = Integer;
+	foreach my $pool (@pools) {
+		@cmd = `ps auwx | grep "$PHP_BIN: pool $pool" | grep -v grep`;
+		foreach (@cmd) {
+			@return = split(/ +/, $_);
+			$value += @return[5] * 1024;
+		}
+		print "$pool.value " . $value . "\n";
+	}
+}

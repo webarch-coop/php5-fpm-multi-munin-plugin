@@ -1,0 +1,74 @@
+#!/usr/bin/perl
+
+#%# family=auto
+#%# capabilities=autoconf
+
+my $ret = undef;
+
+if (! eval "require LWP::UserAgent;")
+{
+	$ret = "LWP::UserAgent not found";
+}
+
+my $URL = exists $ENV{'url'} ? $ENV{'url'} : "http://localhost/phpfpm_%s_status";
+my $PHP_POOLS = exists $ENV{'phppools'} ? $ENV{'phppools'} : "www";
+$PHP_POOLS =~ s/^"//;
+$PHP_POOLS =~ s/"$//;
+
+my @pools = split(/ /, $PHP_POOLS);
+
+if ( defined $ARGV[0] and $ARGV[0] eq "autoconf" )
+{
+	if ($ret)
+	{
+		print "no ($ret)\n";
+		exit 1;
+	}
+
+	my $ua = LWP::UserAgent->new(timeout => 30);
+
+	my @badpools;
+	foreach my $pool (@pools) {
+		my $url = sprintf $URL, $pool;
+		my $response = $ua->request(HTTP::Request->new('GET',$url));
+		push @badpools, $pool unless $response->is_success and $response->content =~ /^accepted conn:/im;
+	}
+
+	if (@badpools) {
+		print "no (phpfpm-status)\n";
+		exit 1;
+	} else {
+		print "yes\n";
+		exit 0;
+	}
+}
+
+if ( defined $ARGV[0] and $ARGV[0] eq "config" )
+{
+	print "graph_title PHP5-FPM Accepted Connections\n";
+	print "graph_args --base 1024 -l 0\n";
+	print "graph_vlabel Connections\n";
+	print "graph_category PHP\n";
+	print "graph_info Plugin created by TJ Stein\n";
+	foreach my $pool (@pools) {
+		print "$pool.label $pool\n";
+		print "$pool.draw LINE2\n";
+		print "$pool.type DERIVE\n";
+		print "$pool.min 0\n";
+	}
+	exit 0;
+}
+
+my $ua = LWP::UserAgent->new(timeout => 30);
+for (my $i = 1; $i <= scalar(@pools); $i++) {
+	my $pool = $pools[$i-1];
+
+	my $url = sprintf $URL, $pool;
+	my $response = $ua->request(HTTP::Request->new('GET',$url));
+	if ($response->content =~ /accepted conn:\s+([0-9\.]+)/im) {
+		print "$pool.value $1\n";
+	} else {
+		print "$pool.value U\n";
+	}
+}
+
