@@ -8,7 +8,7 @@
 #%# capabilities=autoconf
 
 PHP_BIN=${phpbin-"php-fpm"}
-PHP_POOLS=${phppool-"www"}
+PHP_POOLS=${phppools-"www"}
 pools=(`echo $PHP_POOLS`)
 
 if [ "$1" = "autoconf" ]; then

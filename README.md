@@ -45,7 +45,7 @@ location /phpfpm_www_status {
 [phpfpm_multi_*]
 env.url http://localhost/phpfpm_%s_status
 env.phpbin php-fpm
-env.phppools "www"
+env.phppools www
 </pre>
 
 
@@ -76,7 +76,7 @@ location /phpfpm_hoge_status {
 /etc/munin/plguin-conf.d/munin-node の設定で phppools の変数を以下のように変更します。
 
 <pre>
-env.phppools "www hoge"
+env.phppools www hoge
 </pre>
 
 *一部の plugin は perl の libwww-perl ライブラリが必要です。*
