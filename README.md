@@ -80,3 +80,9 @@ env.phppools "www hoge"
 </pre>
 
 *一部の plugin は perl の libwww-perl ライブラリが必要です。*
+
+連絡先
+---
+
+Issue: [GitHub](https://github.com/torut/php5-fpm-multi-munin-plugin/issues)
+
