@@ -8,7 +8,7 @@ $PHP_POOLS =~ s/"$//;
 my @pools = split(/ /, $PHP_POOLS);
 
 if ( exists $ARGV[0] and $ARGV[0] eq "config" ) {
-	print "graph_title PHP5-FPM Memory Usage\n";
+	print "graph_title PHP-FPM Memory Usage\n";
 	print "graph_vlabel RAM\n";
 	print "graph_category PHP\n";
 	foreach my $pool (@pools) {

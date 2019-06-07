@@ -45,11 +45,11 @@ if ( defined $ARGV[0] and $ARGV[0] eq "autoconf" )
 
 if ( defined $ARGV[0] and $ARGV[0] eq "config" )
 {
-	print "graph_title PHP5-FPM Accepted Connections\n";
+	print "graph_title PHP-FPM Accepted Connections\n";
 	print "graph_args --base 1024 -l 0\n";
 	print "graph_vlabel Connections\n";
 	print "graph_category PHP\n";
-	print "graph_info PHP5-FPM Accepted Connections\n";
+	print "graph_info PHP-FPM Accepted Connections\n";
 	foreach my $pool (@pools) {
 		print "$pool.label $pool\n";
 		print "$pool.draw LINE2\n";

@@ -16,11 +16,11 @@ if [ "$1" = "autoconf" ]; then
 fi
 
 if [ "$1" = "config" ]; then
-	echo "graph_title PHP5-FPM Processes"
+	echo "graph_title PHP-FPM Processes"
 	echo 'graph_args --base 1000 -l 0 '
-	echo 'graph_vlabel PHP5-FPM Processes'
+	echo 'graph_vlabel PHP-FPM Processes'
 	echo 'graph_category PHP'
-	echo 'graph_info This graph shows the number of PHP5-FPM processes in the system.'
+	echo 'graph_info This graph shows the number of PHP-FPM processes in the system.'
 
 	for i in `seq 1 ${#pools[@]}`
 	do
