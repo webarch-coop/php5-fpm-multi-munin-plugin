@@ -38,6 +38,9 @@ for i in `seq 1 ${#pools[@]}`
 do
 	pool=${pools[$i-1]}
 	echo -n "$pool.value "
-	ps awwwux | grep "$PHP_BIN: pool $pool" | grep -v grep | awk '{total_mem = $6 * 1024 + total_mem; total_proc++} END{printf("%d\n", total_mem / total_proc)}'
+        POOL_PROCESS=$(ps awwwux | grep "php-fpm: pool ${pool}$" | awk '{ print $13 }' | uniq)
+        if [[ "${POOL_PROCESS}" == "${pool}" ]]; then
+		ps awwwux | grep "$PHP_BIN: pool $pool" | grep -v grep | awk '{total_mem = $6 * 1024 + total_mem; total_proc++} END{printf("%d\n", total_mem / total_proc)}'
+	fi
 done
 
